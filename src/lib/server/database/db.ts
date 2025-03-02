@@ -10,5 +10,5 @@ if (!url) {
 	throw new Error('DATABASE_URL is not set');
 }
 
-const client = postgres({ url, authToken: env.POSTGRES_URL});
+const client = postgres({ url, authToken: env.DATABASE_URL});
 export const db = drizzle(client, { schema });
