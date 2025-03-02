@@ -4,14 +4,11 @@ import { createClient } from '@libsql/client';
 import { env } from '$env/dynamic/private';
 import * as schema from '$lib/server/database/schema'
 
-const url = dev ? 'file:local.db' : env.TURSO_DB_URL;
+const url = dev ? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' : env.POSTGRES_URL;
 
 if (!url) {
-	throw new Error('TURSO_DB_URL is not set');
-}
-if (!dev && !env.TURSO_DB_AUTH_TOKEN) {
-	throw new Error('TURSO_DB_AUTH_TOKEN is not set');
+	throw new Error('POSTGRES_URL is not set');
 }
 
-const libsql = createClient({ url, authToken: env.TURSO_DB_AUTH_TOKEN });
+const libsql = createClient({ url, authToken: env.POSTGRES_URL});
 export const db = drizzle(libsql, { schema });
