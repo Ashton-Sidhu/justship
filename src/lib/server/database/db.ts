@@ -1,14 +1,13 @@
-import { drizzle } from 'drizzle-orm/libsql';
+import { drizzle } from 'drizzle-orm/postgres-js';
 import { dev } from '$app/environment';
-import { createClient } from '@libsql/client';
+import postgres from 'postgres';
 import { env } from '$env/dynamic/private';
-import * as schema from '$lib/server/database/schema'
 
-const url = dev ? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' : env.POSTGRES_URL;
+const url = dev ? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' : env.DATABASE_URL;
 
 if (!url) {
-	throw new Error('POSTGRES_URL is not set');
+	throw new Error('DATABASE_URL is not set');
 }
 
-const libsql = createClient({ url, authToken: env.POSTGRES_URL});
-export const db = drizzle(libsql, { schema });
+const client = postgres(url)
+export const db = drizzle({client});
